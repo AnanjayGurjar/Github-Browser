@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/addRepoFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.AddRepoFragment"
+        android:label="fragment_add_repo"
+        tools:layout="@layout/fragment_add_repo" >
+        <action
+            android:id="@+id/action_addRepoFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/addRepoFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_addRepoFragment"
+            app:destination="@id/addRepoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_branchFragment"
+            app:destination="@id/branchFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_issueFragment"
+            app:destination="@id/issueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/branchFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.BranchFragment"
+        android:label="fragment_branch"
+        tools:layout="@layout/fragment_branch" >
+        <action
+            android:id="@+id/action_branchFragment_to_commitFragment"
+            app:destination="@id/commitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commitFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.CommitFragment"
+        android:label="fragment_commit"
+        tools:layout="@layout/fragment_commit" />
+    <fragment
+        android:id="@+id/issueFragment"
+        android:name="com.ananjay.githubbrowser.ui.fragments.IssueFragment"
+        android:label="fragment_issue"
+        tools:layout="@layout/fragment_issue" />
+</navigation>
