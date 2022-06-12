@@ -48,20 +48,33 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     // Room components
 
-    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
-    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
+    def roomVersion = "2.4.2"
+    //room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
-    // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+    //coroutine
+    implementation "androidx.room:room-ktx:$roomVersion"
 
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+//    implementation 'com.github.Drjacky:ImagePicker:2.1.15'
+
+    implementation "io.coil-kt:coil:2.0.0-rc03"
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-alpha06")
+    // ViewModel utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha06")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-alpha06")
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha06")
+
+    // Saved state module for ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0-alpha06")
+
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.5.0-alpha06")
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:2.9.0"

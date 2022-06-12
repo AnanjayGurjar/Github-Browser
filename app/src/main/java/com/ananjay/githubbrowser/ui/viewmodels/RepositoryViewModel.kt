@@ -1,7 +1,10 @@
 package com.ananjay.githubbrowser.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ananjay.githubbrowser.database.MyRepoModel
@@ -12,10 +15,12 @@ import com.ananjay.githubbrowser.models.commit.CommitModel
 import com.ananjay.githubbrowser.models.issue.IssueModel
 import com.ananjay.githubbrowser.models.repository.RepositoryModel
 import com.ananjay.githubbrowser.repositories.GithubRepoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class RepositoryViewModel(application: Application) : AndroidViewModel(application) {
-
+    private  val TAG = "RepositoryViewModel"
 
     private val repoDao =
         RepositoryDataBase.getDataBase(application).repoDao()
@@ -28,15 +33,22 @@ class RepositoryViewModel(application: Application) : AndroidViewModel(applicati
     var allCommits = MutableLiveData<List<CommitModel>>()
     var allIssues = MutableLiveData<List<IssueModel>>()
 
-    val allOfflineRepos  = repository.allRepos
+    var allOfflineRepos  = repository.allRepos
 
     /********OPERATIONS ON REMOTE********/
 
     fun getRepo(ownerName: String, repoName: String)  {
         viewModelScope.launch {
             val response  = repository.getRepository(ownerName, repoName)
-            if (response.isSuccessful) {
+            if (response.isSuccessful && response.body() != null) {
+                Log.d(TAG, "getRepo: ${response.body()!!.url}")
                 myRepo.postValue(response.body())
+                var repository = response.body()
+                insertRepoToDb(MyRepoModel(repository!!.name, repository.description, repository.owner.login, repository.html_url))
+            }
+            else{
+                Toast.makeText(getApplication(), "Entered search is not found", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "getRepo: ${response.errorBody()}")
             }
         }
     }
@@ -51,11 +63,12 @@ class RepositoryViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun getAllCommits(ownerName: String, repoName: String){
+    fun getAllCommits(ownerName: String, repoName: String, branch: String){
         viewModelScope.launch {
-            val response = repository.getAllCommits(ownerName, repoName)
+            val response = repository.getAllCommits(ownerName, repoName, branch)
             if(response.isSuccessful && !response.body().isNullOrEmpty()){
                 allCommits.postValue(response.body())
+
             }
         }
     }
@@ -77,11 +90,8 @@ class RepositoryViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-//    fun getAllRepoFromDb(repo: MyRepoModel){
-//        viewModelScope.launch {
-//            var allrepos = repository.getAllRepoFromDb(repo)
-//            allOfflineRepos.postValue(allrepos)
-//        }
-//    }
+    fun getAllRepoFromDb() : LiveData<List<MyRepoModel>> {
+        return repository.getAllRepoFromDb()
+    }
 
 }

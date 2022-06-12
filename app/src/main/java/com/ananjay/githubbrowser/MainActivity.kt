@@ -15,15 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
-        ).get(RepositoryViewModel::class.java)
-//
-//        viewModel.getRepo("jquery", "jquery")
-//        viewModel.myRepo.observe(this) {
-//            Log.d(TAG, "onCreate: ${it.archive_url}")
-//        }
+
 
     }
 

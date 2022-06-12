@@ -8,6 +8,8 @@ import com.ananjay.githubbrowser.models.commit.CommitModel
 import com.ananjay.githubbrowser.models.issue.IssueModel
 import com.ananjay.githubbrowser.models.repository.RepositoryModel
 import com.ananjay.githubbrowser.remote.RetrofitBuilder
+import com.ananjay.githubbrowser.utils.networkBoundResource
+import kotlinx.coroutines.delay
 import retrofit2.Response
 
 class GithubRepoRepository(private val repositoryDao: RepositoryDao) {
@@ -17,6 +19,19 @@ class GithubRepoRepository(private val repositoryDao: RepositoryDao) {
     }
     val allRepos : LiveData<List<MyRepoModel>> = repositoryDao.getAllRepo()
 
+//    fun getOfflineRepository(name: String, ownerName: String) = networkBoundResource(
+//        query = {
+//            repositoryDao.getAllRepo()
+//        },
+//        fetch = {
+//            delay(2000)
+//            retrofitInstance.getRepository(ownerName, name)
+//        },
+//        saveFetchResult = {
+//            repositoryDao.deleteAllRepos()
+//            repositoryDao.insertRepo(MyRepoModel(it.body()!!.name, it.body()!!.description))
+//        }
+//    )
     suspend fun getRepository(ownerName: String, repoName: String): Response<RepositoryModel>{
         return retrofitInstance.getRepository(ownerName, repoName)
     }
@@ -25,8 +40,8 @@ class GithubRepoRepository(private val repositoryDao: RepositoryDao) {
         return retrofitInstance.getAllBranches(ownerName, repoName)
     }
 
-    suspend fun getAllCommits(ownerName: String, repoName: String): Response<List<CommitModel>>{
-        return retrofitInstance.getAllCommits(ownerName, repoName)
+    suspend fun getAllCommits(ownerName: String, repoName: String, branch: String): Response<List<CommitModel>>{
+        return retrofitInstance.getAllCommits(ownerName, repoName, branch)
     }
 
     suspend fun getOpenIssues(ownerName: String, repoName: String): Response<List<IssueModel>>{
@@ -36,8 +51,8 @@ class GithubRepoRepository(private val repositoryDao: RepositoryDao) {
     suspend fun insertRepositoryInDb(repo: MyRepoModel){
         return repositoryDao.insertRepo(repo)
     }
-
-    suspend fun getAllRepoFromDb(repo: MyRepoModel) : LiveData<List<MyRepoModel>>{
+//
+    fun getAllRepoFromDb() : LiveData<List<MyRepoModel>>{
         return repositoryDao.getAllRepo()
     }
 }
