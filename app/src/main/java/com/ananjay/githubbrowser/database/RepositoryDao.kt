@@ -1,10 +1,7 @@
 package com.ananjay.githubbrowser.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,8 +14,10 @@ interface RepositoryDao {
 
     @Query("SELECT * FROM repositories")
     fun getAllRepo () : LiveData<List<MyRepoModel>>
-//    fun getAllRepo () : Flow<List<MyRepoModel>>
 
-    @Query("DELETE FROM repositories")
-    suspend fun deleteAllRepos()
+    @Query("DELETE FROM repositories WHERE id = :repoModelId")
+    suspend fun deleteRepo(repoModelId: Int)
+
+    @Delete
+    suspend fun delete(repo: MyRepoModel)
 }

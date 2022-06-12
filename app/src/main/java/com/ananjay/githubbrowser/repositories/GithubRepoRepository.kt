@@ -51,8 +51,16 @@ class GithubRepoRepository(private val repositoryDao: RepositoryDao) {
     suspend fun insertRepositoryInDb(repo: MyRepoModel){
         return repositoryDao.insertRepo(repo)
     }
-//
+
     fun getAllRepoFromDb() : LiveData<List<MyRepoModel>>{
         return repositoryDao.getAllRepo()
+    }
+
+    suspend fun deleteFromDb(repoModelId: Int){
+        return repositoryDao.deleteRepo(repoModelId)
+    }
+    suspend fun delete(repo: MyRepoModel){
+        return repositoryDao.delete(repo)
+
     }
 }

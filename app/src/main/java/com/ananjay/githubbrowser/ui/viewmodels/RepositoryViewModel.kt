@@ -94,4 +94,17 @@ class RepositoryViewModel(application: Application) : AndroidViewModel(applicati
         return repository.getAllRepoFromDb()
     }
 
+    fun deleteRepo(repoModelId: Int){
+        viewModelScope.launch {
+            repository.deleteFromDb(repoModelId)
+            Log.d(TAG, "deleteRepo:   , is it deleting")
+        }
+    }
+
+    fun delete(repo: MyRepoModel){
+        viewModelScope.launch {
+            repository.delete(repo)
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ import com.ananjay.githubbrowser.adapters.HomeFragmentAdapter
 import com.ananjay.githubbrowser.database.MyRepoModel
 import com.ananjay.githubbrowser.databinding.FragmentHomeBinding
 import com.ananjay.githubbrowser.ui.viewmodels.RepositoryViewModel
+import com.google.gson.Gson
 
 
 class HomeFragment : Fragment() , ClickListener{
@@ -51,12 +52,11 @@ class HomeFragment : Fragment() , ClickListener{
             viewModel.getRepo(name.toString().trim(), repoName.toString().trim())
         }
 
-
-
         adapter = HomeFragmentAdapter(currList, this){
             val name = currList[it].repoName
             val ownerName = currList[it].ownerName
-            var bundle = bundleOf("name" to name, "ownerName" to ownerName)
+            val id = currList[it].id
+            var bundle = bundleOf("name" to name, "ownerName" to ownerName, "id" to id)
 
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFragment, bundle
@@ -79,23 +79,10 @@ class HomeFragment : Fragment() , ClickListener{
 
     private fun initRecycler(){
 
-
         binding.apply {
             rvFavoriteRepo.adapter = adapter
             rvFavoriteRepo.layoutManager = LinearLayoutManager(requireContext())
         }
-
-//        lifecycleScope.launchWhenStarted {
-//            viewModel.allOfflineRepos.observe(requireActivity()){
-//                currList.addAll(it)
-//                Log.d(TAG, "initRecycler: ${currList.toString()}")
-//                adapter.notifyDataSetChanged()
-//                launch(Dispatchers.Main){
-//                    updateView()
-//                }
-//            }
-//        }
-
     }
 
     private fun shareRepository(repoName: String, repoDesc: String?, repoUrl: String){
